@@ -1,0 +1,13 @@
+name: CI Pipeline
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Test Run
+        run: |
+          echo "🎉 Success! Your DevOps workflow is running!"
+          echo "Repository contents:"
+          ls -la
