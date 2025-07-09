@@ -1,13 +1,25 @@
-name: CI Pipeline
-on: [push]
+name: Docker CI
+on: [push, pull_request]
+
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Test Run
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: docker build -t login-app .
+
+      - name: Run the container
         run: |
-          echo "🎉 Success! Your DevOps workflow is running!"
-          echo "Repository contents:"
-          ls -la
+          docker run --name test-login --rm -d login-app
+          docker logs test-login
+          docker stop test-login
+
+      - name: Verify output
+        run: |
+          docker run --rm login-app | grep -q "Login API operational!"
