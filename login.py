@@ -1,1 +1,2 @@
-Login API prototype
+print("Login API is working!")
+
